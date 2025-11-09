@@ -1,120 +1,129 @@
 package com.example.rehabtrack;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.content.SharedPreferences; // <-- NEW IMPORT
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View; // <-- NEW IMPORT
+import android.widget.Button; // <-- NEW IMPORT
+import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toast; // <-- NEW IMPORT
 import android.widget.VideoView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import java.util.Objects;
+import java.text.SimpleDateFormat; // <-- NEW IMPORT
+import java.util.Date; // <-- NEW IMPORT
+import java.util.Locale; // <-- NEW IMPORT
 
 public class ExerciseDetailActivity extends AppCompatActivity {
-
-    // --- UI Components ---
-    private Toolbar toolbar;
-    private VideoView videoView;
-    private TextView tvName, tvCategory, tvDescription;
-    private Button btnStart;
-
-    // --- Data ---
-    private DatabaseHelper dbHelper;
-    private Exercise currentExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_detail); // <-- This links to your XML file
+        setContentView(R.layout.activity_exercise_detail);
 
-        // 1. Initialize DB Helper
-        dbHelper = new DatabaseHelper(this);
+        TextView exerciseNameTextView = findViewById(R.id.exerciseNameTextView);
+        TextView exerciseDescriptionTextView = findViewById(R.id.exerciseDescriptionTextView);
+        VideoView exerciseVideoView = findViewById(R.id.exerciseVideoView);
+        Button completeButton = findViewById(R.id.completeButton); // <-- FIND THE NEW BUTTON
 
-        // 2. Find all UI views from your XML
-        toolbar = findViewById(R.id.toolbarDetail);
-        videoView = findViewById(R.id.videoViewExercise);
-        tvName = findViewById(R.id.textViewDetailName);
-        tvCategory = findViewById(R.id.textViewDetailCategory);
-        tvDescription = findViewById(R.id.textViewDetailDescription);
-        btnStart = findViewById(R.id.buttonStartExercise);
+        Intent intent = getIntent();
+        String exerciseName = intent.getStringExtra("EXERCISE_NAME");
+        exerciseNameTextView.setText(exerciseName);
 
-        // 3. Set up the Toolbar
-        setSupportActionBar(toolbar);
-        // Add null check and back button
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed()); // Make back button work
-
-        // 4. Get the Exercise ID from the Intent (sent by ExerciseListActivity)
-        int exerciseId = getIntent().getIntExtra("EXERCISE_ID", -1);
-
-        // 5. Check if the ID is valid
-        if (exerciseId == -1) {
-            Toast.makeText(this, "Error: Exercise not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+        String videoPath = "";
+        if (exerciseName != null) {
+            switch (exerciseName) {
+                case "Knee Bend":
+                    exerciseDescriptionTextView.setText("Sit on a chair. Gently extend your knee, hold for 5 seconds, and slowly lower it back down.");
+                    videoPath = "android.resource://" + getPackageName() + "/" + R.raw.knee_raise;
+                    break;
+                case "Shoulder Stretch":
+                    exerciseDescriptionTextView.setText("Reach one arm across your chest. Use your other arm to gently pull it closer. Hold for 15 seconds.");
+                    videoPath = "android.resource://" + getPackageName() + "/" + R.raw.shoulder_stretch;
+                    break;
+                case "Leg Raise":
+                    exerciseDescriptionTextView.setText("Lie on your back. Keep one leg straight and slowly raise it 6 inches off the floor. Hold, then lower.");
+                    videoPath = "android.resource://" + getPackageName() + "/" + R.raw.leg_raise;
+                    break;
+                case "Wrist Flex":
+                    exerciseDescriptionTextView.setText("Hold your arm out, palm facing up. Gently bend your wrist down with your other hand. Hold for 15 seconds.");
+                    videoPath = "android.resource://" + getPackageName() + "/" + R.raw.wrist_flex;
+                    break;
+                default:
+                    exerciseDescriptionTextView.setText("No description available.");
+            }
         }
 
-        // 6. Load the exercise from the database
-        currentExercise = dbHelper.getExerciseById(exerciseId);
+        if (!videoPath.isEmpty()) {
+            Uri videoUri = Uri.parse(videoPath);
+            exerciseVideoView.setVideoURI(videoUri);
+            MediaController mediaController = new MediaController(this);
+            exerciseVideoView.setMediaController(mediaController);
+            mediaController.setAnchorView(exerciseVideoView);
 
-        // 7. Populate the UI with data
-        if (currentExercise != null) {
-            getSupportActionBar().setTitle(currentExercise.getName()); // Set toolbar title
-            tvName.setText(currentExercise.getName());
-            tvCategory.setText(currentExercise.getCategory());
-            tvDescription.setText(currentExercise.getDescription());
-
-            // 8. Set up the Video
-            playVideo(currentExercise.getVideoFilename());
-        } else {
-            Toast.makeText(this, "Error: Could not load exercise", Toast.LENGTH_SHORT).show();
-            finish();
+            exerciseVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
         }
 
-        // 9. Set up the "Start Exercise" button
-        btnStart.setOnClickListener(new View.OnClickListener() {
+        // **************************************************
+        // NEW: Handle the "Complete" button click
+        // **************************************************
+        completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // This will link to Feature 2 (ExercisePlayerActivity)
-                Toast.makeText(ExerciseDetailActivity.this, "Starting " + currentExercise.getName(), Toast.LENGTH_SHORT).show();
+                // 1. Get today's date
+                String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                // --- LATER, YOU WILL DO THIS ---
-                // Intent intent = new Intent(ExerciseDetailActivity.this, ExercisePlayerActivity.class);
-                // intent.putExtra("EXERCISE_ID", currentExercise.getId());
-                // startActivity(intent);
+                // 2. Create a unique key for saving (e.g., "Knee Bend_2023-10-27")
+                String saveKey = exerciseName + "_" + today;
+
+                // 3. Save it to SharedPreferences (simple internal storage)
+                SharedPreferences prefs = getSharedPreferences("RehabTrackData", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(saveKey, true);
+                editor.apply();
+
+                // 4. Show a confirmation message
+                Toast.makeText(ExerciseDetailActivity.this, "Great job! " + exerciseName + " completed for today.", Toast.LENGTH_SHORT).show();
+
+                // 5. (Optional) Disable button so they can't click it twice
+                completeButton.setEnabled(false);
+                completeButton.setText("Completed Today ✅");
             }
         });
-    }
 
-    private void playVideo(String videoFilename) {
-        // Videos must be in the 'res/raw' folder.
-        int videoResourceId = getResources().getIdentifier(videoFilename, "raw", getPackageName());
-
-        if (videoResourceId == 0) {
-            Toast.makeText(this, "Error: Video file not found (" + videoFilename + ")", Toast.LENGTH_SHORT).show();
-            return;
+        // Check if already completed today when opening the screen
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String saveKey = exerciseName + "_" + today;
+        SharedPreferences prefs = getSharedPreferences("RehabTrackData", MODE_PRIVATE);
+        boolean isCompleted = prefs.getBoolean(saveKey, false);
+        if (isCompleted) {
+            completeButton.setEnabled(false);
+            completeButton.setText("Completed Today ✅");
         }
 
-        String videoPath = "android.resource://" + getPackageName() + "/" + videoResourceId;
-        Uri uri = Uri.parse(videoPath);
-        videoView.setVideoURI(uri);
 
-        // Add media controls (play, pause)
-        videoView.setMediaController(new android.widget.MediaController(this));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
 
-        // Add looping
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
-
-        videoView.start(); // Start playing the video
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

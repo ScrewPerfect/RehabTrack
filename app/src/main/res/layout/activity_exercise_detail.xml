@@ -1,73 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ExerciseDetailActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/exerciseNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:text="Exercise Name"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <VideoView
+        android:id="@+id/exerciseVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/exerciseDescriptionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="Description..."
+        android:textSize="18sp"
+        android:layout_marginBottom="24dp"
+        android:lineSpacingExtra="4dp"/>
 
-        <!-- Toolbar (Optional but recommended) -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarDetail"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/white"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <!-- NEW BUTTON ADDED HERE -->
+    <Button
+        android:id="@+id/completeButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Mark as Complete"
+        android:textSize="20sp"
+        android:backgroundTint="@color/design_default_color_primary"
+        android:textColor="@android:color/white"/>
 
-        <!-- Video Player -->
-        <VideoView
-            android:id="@+id/videoViewExercise"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_margin="16dp"/>
-
-        <!-- Exercise Name -->
-        <TextView
-            android:id="@+id/textViewDetailName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            tools:text="Knee Raise" />
-
-        <!-- Exercise Category -->
-        <TextView
-            android:id="@+id/textViewDetailCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="?attr/colorPrimary"
-            tools:text="Knee" />
-
-        <!-- Description -->
-        <TextView
-            android:id="@+id/textViewDetailDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:lineSpacingExtra="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="This is a detailed description of the exercise, explaining how to perform it correctly. Sit on the edge of a chair with your feet flat on the floor..." />
-
-        <!-- Start Button -->
-        <Button
-            android:id="@+id/buttonStartExercise"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:padding="16dp"
-            android:text="Start Exercise"
-            android:textSize="18sp"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-This is the main layout for our ExerciseListActivity.
-It contains a Toolbar at the top and a RecyclerView to fill the rest of the screen.
--->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExerciseListActivity"> <!-- We will create this Java file next -->
+    android:orientation="vertical"
+    tools:context=".ExerciseListActivity">
 
-    <!-- A simple Toolbar at the top -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
+        android:text="Select an Exercise"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:gravity="center"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="All Exercises" />
+        android:textColor="?attr/colorOnPrimary"/>
 
     <!--
-    This is the RecyclerView. It will be populated with the
-    'exercise_list_item.xml' layouts.
+        THIS IS THE IMPORTANT LINE:
+        Make sure your ListView has this exact id.
     -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewExercises"
+    <ListView
+        android:id="@+id/exerciseListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:padding="8dp" />
+        android:layout_height="match_parent" />
 
-</RelativeLayout>
+</LinearLayout>

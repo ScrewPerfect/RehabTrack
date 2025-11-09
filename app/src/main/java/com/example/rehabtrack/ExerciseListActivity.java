@@ -1,83 +1,57 @@
 package com.example.rehabtrack;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+// THIS IS THE ONLY CLASS THAT SHOULD BE IN THIS FILE
+public class ExerciseListActivity extends AppCompatActivity {
 
-import java.util.ArrayList;
-
-/**
- * This Activity displays the main list of all available exercises
- * using a RecyclerView. It implements our custom click listener
- * to handle when a user taps on an exercise.
- */
-public class ExerciseListActivity extends AppCompatActivity implements ExerciseAdapter.OnItemClickListener {
-
-    // --- UI Components ---
-    private RecyclerView recyclerViewExercises;
-    private Toolbar toolbar;
-
-    // --- Data ---
-    private DatabaseHelper dbHelper;
-    private ArrayList<Exercise> exerciseList;
-    private ExerciseAdapter exerciseAdapter;
+    // 1. Create a simple array of strings for our exercise data
+    String[] exerciseListData = {"Knee Bend", "Shoulder Stretch", "Leg Raise", "Wrist Flex"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Set the layout from activity_exercise_list.xml
+        // This line connects your Java code to your layout file (activity_exercise_list.xml)
         setContentView(R.layout.activity_exercise_list);
 
-        // 2. Initialize the Database Helper
-        dbHelper = new DatabaseHelper(this);
+        // 2. Find the ListView in our layout
+        ListView exerciseListView = findViewById(R.id.exerciseListView);
 
-        // 3. Find and set up the Toolbar
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("All Exercises");
+        // 3. Create an "Adapter"
+        // An adapter takes your data (the array) and "adapts" it to be shown in the ListView
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1, // A built-in, simple layout for one line of text
+                exerciseListData // The data to display
+        );
 
-        // 4. Find the RecyclerView
-        recyclerViewExercises = findViewById(R.id.recyclerViewExercises);
+        // 4. Set the adapter on the ListView
+        exerciseListView.setAdapter(adapter);
 
-        // 5. Load the data from the database
-        // We use the function we created in DatabaseHelper
-        exerciseList = dbHelper.getAllExercises();
+        // 5. Set a click listener for the list items
+        exerciseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the name of the exercise that was clicked
+                String selectedExercise = exerciseListData[position];
 
-        // 6. Set up the RecyclerView
-        // Create the adapter
-        exerciseAdapter = new ExerciseAdapter(this, exerciseList);
-        // Set the adapter on the RecyclerView
-        recyclerViewExercises.setAdapter(exerciseAdapter);
-        // Set the layout manager (e.g., a vertical list)
-        recyclerViewExercises.setLayoutManager(new LinearLayoutManager(this));
+                // Create an Intent to open the ExerciseDetailActivity
+                Intent intent = new Intent(ExerciseListActivity.this, ExerciseDetailActivity.class);
 
-        // 7. Set the click listener (this class implements the interface)
-        exerciseAdapter.setOnItemClickListener(this);
-    }
+                // "Put" the name of the exercise into the Intent so the next activity knows what was clicked
+                intent.putExtra("EXERCISE_NAME", selectedExercise);
 
-    /**
-     * This method is required by the 'ExerciseAdapter.OnItemClickListener' interface.
-     * It will be called by the adapter when an item is clicked.
-     *
-     * @param exerciseId The unique ID of the exercise that was clicked.
-     */
-    @Override
-    public void onItemClick(int exerciseId) {
-        // When an item is clicked, we open the Detail Activity
-
-        // 1. Create an Intent to open ExerciseDetailActivity (we will create this next)
-        Intent intent = new Intent(this, ExerciseDetailActivity.class);
-
-        // 2. Pass the ID of the clicked exercise to the new activity.
-        // This is how the detail activity knows which exercise to show.
-        intent.putExtra("EXERCISE_ID", exerciseId);
-
-        // 3. Start the new activity
-        startActivity(intent);
+                // Start the detail activity
+                startActivity(intent);
+            }
+        });
     }
 }
