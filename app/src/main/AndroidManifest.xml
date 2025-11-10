@@ -11,12 +11,6 @@
         android:theme="@style/Theme.RehabTrack"
         tools:targetApi="31">
 
-        <!--
-        The two lines that were causing the error have been removed from this block.
-        (android:dataExtractionRules and android:fullBackupContent)
-        -->
-
-        <!-- Your auto-generated MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -26,18 +20,16 @@
             </intent-filter>
         </activity>
 
-        <!-- Your Exercise List Activity -->
+        <!-- UPDATED: Added parentActivityName to enable the back arrow -->
         <activity
             android:name=".ExerciseListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
 
-        <!--
-            ADD THIS BLOCK FOR YOUR NEW DETAIL ACTIVITY
-        -->
         <activity
             android:name=".ExerciseDetailActivity"
             android:exported="false"
-            android:parentActivityName=".ExerciseListActivity" /> <!-- This adds the automatic back arrow -->
+            android:parentActivityName=".ExerciseListActivity" />
 
     </application>
 
