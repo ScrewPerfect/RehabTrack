@@ -1,33 +1,62 @@
 package com.example.rehabtrack;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // This line connects your Java code to your layout file (activity_main.xml)
         setContentView(R.layout.activity_main);
 
-        // 1. Find the button in our layout file
         Button startButton = findViewById(R.id.startButton);
+        Button historyButton = findViewById(R.id.historyButton); // Find the new history button
+        Button resetButton = findViewById(R.id.resetButton);
 
-        // 2. Set a click listener on the button
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 3. When clicked, create an "Intent" to open the ExerciseListActivity
                 Intent intent = new Intent(MainActivity.this, ExerciseListActivity.class);
-
-                // 4. Start the new activity
                 startActivity(intent);
+            }
+        });
+
+        // Handle History Button Click
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Handle Reset Button Click
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Reset Progress")
+                        .setMessage("Are you sure you want to clear all exercise history?")
+                        .setPositiveButton("Yes, Reset", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences prefs = getSharedPreferences("RehabTrackData", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.clear();
+                                editor.commit(); // <-- CHANGED FROM apply() TO commit()
+                                Toast.makeText(MainActivity.this, "Progress reset!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
     }

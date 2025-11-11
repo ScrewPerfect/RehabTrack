@@ -24,7 +24,15 @@
         android:textSize="18sp"
         android:layout_marginBottom="16dp"/>
 
-    <!-- NEW RESET BUTTON -->
+    <!-- NEW HISTORY BUTTON -->
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View History"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
     <Button
         android:id="@+id/resetButton"
         android:layout_width="wrap_content"

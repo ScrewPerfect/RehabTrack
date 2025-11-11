@@ -91,7 +91,7 @@ public class ExerciseDetailActivity extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences("RehabTrackData", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(saveKey, true);
-                editor.apply();
+                editor.commit(); // <-- CHANGED FROM apply() TO commit() - This is synchronous!
 
                 // 4. Show a confirmation message
                 Toast.makeText(ExerciseDetailActivity.this, "Great job! " + exerciseName + " completed for today.", Toast.LENGTH_SHORT).show();

@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This CardView creates the shadow and rounded corners -->
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!--
+    This is a simplified layout that does NOT use CardView,
+    to avoid problems with missing libraries.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="20dp"
+    android:gravity="center_vertical"
+    android:background="@android:color/white"
     android:layout_marginStart="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    android:layout_marginBottom="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- The Exercise Name -->
+    <TextView
+        android:id="@+id/cardExerciseName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp"
-        android:gravity="center_vertical">
+        android:layout_weight="1"
+        android:text="Exercise Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
 
-        <!-- The Exercise Name -->
-        <TextView
-            android:id="@+id/cardExerciseName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Exercise Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
-
-        <!-- The Green Checkmark (Hidden by default) -->
-        <ImageView
-            android:id="@+id/cardCheckmark"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@android:drawable/checkbox_on_background"
-            app:tint="#4CAF50"
-            android:visibility="gone"
-            android:contentDescription="Completed" />
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+    <!-- The Green Checkmark (Hidden by default) -->
+    <ImageView
+        android:id="@+id/cardCheckmark"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@android:drawable/checkbox_on_background"
+        android:tint="#4CAF50"
+        android:visibility="gone"
+        android:contentDescription="Completed"
+        tools:ignore="UseAppTint" />
+</LinearLayout>
