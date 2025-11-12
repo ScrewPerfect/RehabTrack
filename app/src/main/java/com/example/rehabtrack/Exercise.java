@@ -1,63 +1,35 @@
 package com.example.rehabtrack;
 
+// This class is a "model" for your exercise data.
 public class Exercise {
 
     private int id;
     private String name;
     private String description;
-    private String category;
-    private String videoFilename;
+    private String videoFileName; // We'll use this later
 
-    // A constructor to create a new Exercise object
-    public Exercise(int id, String name, String description, String category, String videoFilename) {
+    // Constructor
+    public Exercise(int id, String name, String description, String videoFileName) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.category = category;
-        this.videoFilename = videoFilename;
+        this.videoFileName = videoFileName;
     }
 
-    // --- Getters and Setters ---
-    // Android Studio can generate these for you:
-    // Right-click -> Generate -> Getters and Setters -> Select All
-
+    // --- Getters ---
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getVideoFilename() {
-        return videoFilename;
-    }
-
-    public void setVideoFilename(String videoFilename) {
-        this.videoFilename = videoFilename;
+    public String getVideoFileName() {
+        return videoFileName;
     }
 }

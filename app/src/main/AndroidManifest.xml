@@ -11,6 +11,7 @@
         android:theme="@style/Theme.RehabTrack"
         tools:targetApi="31">
 
+        <!-- Activity 1: Main -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -20,16 +21,23 @@
             </intent-filter>
         </activity>
 
-        <!-- UPDATED: Added parentActivityName to enable the back arrow -->
+        <!-- Activity 2: List -->
         <activity
             android:name=".ExerciseListActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <!-- Activity 3: Detail -->
         <activity
             android:name=".ExerciseDetailActivity"
             android:exported="false"
             android:parentActivityName=".ExerciseListActivity" />
+
+        <!-- Activity 4: History (THIS IS THE ONE THAT WAS MISSING) -->
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
 
     </application>
 

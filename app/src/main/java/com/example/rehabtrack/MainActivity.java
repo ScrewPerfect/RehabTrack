@@ -11,15 +11,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+// --- THIS IS THE CRITICAL IMPORT ---
+import com.example.rehabtrack.R;
+// -----------------------------------
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // This line will now work
 
+        // These lines will now work
         Button startButton = findViewById(R.id.startButton);
-        Button historyButton = findViewById(R.id.historyButton); // Find the new history button
+        Button historyButton = findViewById(R.id.historyButton);
         Button resetButton = findViewById(R.id.resetButton);
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                                 SharedPreferences prefs = getSharedPreferences("RehabTrackData", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.clear();
-                                editor.commit(); // <-- CHANGED FROM apply() TO commit()
+                                editor.commit(); // Use commit!
                                 Toast.makeText(MainActivity.this, "Progress reset!", Toast.LENGTH_SHORT).show();
                             }
                         })

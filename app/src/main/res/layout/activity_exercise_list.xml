@@ -18,10 +18,6 @@
         android:background="?attr/colorPrimary"
         android:textColor="?attr/colorOnPrimary"/>
 
-    <!--
-        THIS IS THE IMPORTANT LINE:
-        Make sure your ListView has this exact id.
-    -->
     <ListView
         android:id="@+id/exerciseListView"
         android:layout_width="match_parent"
